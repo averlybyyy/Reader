@@ -31,7 +31,6 @@
   .screen.active{display:flex;}
   #app{height:100vh; height:100dvh; display:flex; flex-direction:column; touch-action:pan-y;}
 
-  /* ---------- Top bar (library) ---------- */
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
     padding:14px 16px; border-bottom:1px solid var(--border); background:var(--panel);
@@ -44,7 +43,6 @@
   }
   .iconbtn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; color:#fff; font-weight:600; box-shadow:0 3px 10px rgba(124,58,237,0.35);}
 
-  /* ---------- Library ---------- */
   #libraryList{flex:1 1 auto; overflow-y:auto; padding:14px; display:grid; gap:10px;}
   .bookCard{
     background:var(--panel); border:1px solid var(--border); border-radius:14px;
@@ -64,7 +62,6 @@
   .tagBtn, .delBtn{background:none; border:none; color:var(--muted); font-size:17px; padding:6px;}
   .emptyState{margin:auto; text-align:center; color:var(--muted); padding:40px 24px; line-height:1.5;}
 
-  /* ---------- Reader ---------- */
   #readerBar{
     flex:0 0 auto; display:flex; align-items:center; gap:8px;
     padding:10px 12px; background:var(--panel); border-bottom:1px solid var(--border);
@@ -77,21 +74,21 @@
     flex:0 0 auto; height:46px; background:var(--panel2); border-bottom:1px solid var(--border);
     position:relative; overflow:hidden; display:flex; align-items:center;
   }
-  #stripWrap::after{
-    content:''; position:absolute; right:0; top:0; bottom:0; width:22px;
-    background:linear-gradient(90deg, transparent, var(--panel2));
-    pointer-events:none;
+  #stripWrap::before, #stripWrap::after{
+    content:''; position:absolute; top:0; bottom:0; width:22px; z-index:2; pointer-events:none;
   }
+  #stripWrap::before{ left:0; background:linear-gradient(90deg, var(--panel2), transparent); }
+  #stripWrap::after{ right:0; background:linear-gradient(90deg, transparent, var(--panel2)); }
   #strip{
     display:flex; flex-wrap:nowrap; align-items:center; height:100%;
     overflow:hidden; padding:0 16px; white-space:nowrap;
   }
-  .stripSeg{flex:0 0 auto; white-space:nowrap; color:#cfd6e4; font-size:15px; margin-right:18px;}
+  .stripSeg{flex:0 0 auto; white-space:nowrap; color:#cfd6e4; font-size:15px; margin-right:16px; padding:3px 2px; border-radius:4px;}
   .stripSeg.loading{color:var(--muted); font-style:italic;}
-  .stripSeg.current{color:#e9e2ff;}
+  .stripSeg.current{background:rgba(139,92,246,0.22); color:#efeaff;}
 
   #mainText{flex:1 1 auto; overflow-y:auto; padding:18px 18px 100px; -webkit-overflow-scrolling:touch;}
-  #mainText p{font-size:18px; line-height:1.75; margin:0 0 22px; color:var(--reading-text); scroll-margin-top:10px;}
+  #mainText p{font-size:18px; line-height:1.75; margin:0 0 22px; color:var(--reading-text);}
   .word{border-radius:3px; padding:0 1px; cursor:pointer;}
   .word:active{background:rgba(255,255,255,0.12);}
   .word.known{color:var(--known); font-weight:600;}
@@ -100,16 +97,17 @@
   .chapNavBottom{position:fixed; bottom:calc(14px + env(safe-area-inset-bottom)); left:0; right:0; display:flex; justify-content:center; gap:10px; pointer-events:none;}
   .chapNavBottom button{pointer-events:auto;}
 
-  /* ---------- Word popup ---------- */
-  #overlay{position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; z-index:40;}
+  #overlay{position:fixed; inset:0; background:transparent; display:none; z-index:40;}
   #overlay.show{display:block;}
   #sheet{
     position:fixed; left:0; right:0; bottom:0; background:var(--panel); z-index:41;
     border-radius:18px 18px 0 0; padding:18px 18px calc(18px + env(safe-area-inset-bottom));
-    transform:translateY(100%); transition:transform .22s ease; box-shadow:0 -8px 30px rgba(0,0,0,0.4);
+    transform:translateY(100%); transition:transform .22s ease; box-shadow:0 -6px 24px rgba(0,0,0,0.35), 0 0 0 1px var(--border);
   }
   #sheet.show{transform:translateY(0);}
-  #sheetWord{font-size:22px; font-weight:700; margin:0 0 4px;}
+  #sheetWordRow{display:flex; align-items:baseline; gap:10px; margin-bottom:4px;}
+  #sheetWord{font-size:22px; font-weight:700;}
+  #sheetPhonetic{color:var(--accent); font-size:15px;}
   #sheetTranslation{color:#cfd6e4; font-size:16.5px; min-height:24px; margin-bottom:16px;}
   .sheetBtns{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
   .sheetBtns button{
@@ -120,12 +118,13 @@
   .sheetBtns button.unsure{background:rgba(201,162,39,0.15); border-color:var(--unsure); color:var(--unsure);}
   .sheetBtns button.unknown{background:rgba(207,90,82,0.15); border-color:var(--unknown); color:var(--unknown);}
 
-  /* ---------- Settings ---------- */
   #settingsBody{padding:16px; overflow-y:auto;}
   .setRow{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px;}
   .setRow h3{margin:0 0 6px; font-size:14px;}
-  .setRow p{margin:0; color:var(--muted); font-size:13.5px; line-height:1.5;}
-  .dangerBtn{margin-top:10px; background:rgba(207,90,82,0.15); color:var(--unknown); border:1px solid var(--unknown); border-radius:9px; padding:9px 14px; font-size:14px;}
+  .setRow p{margin:0 0 10px; color:var(--muted); font-size:13.5px; line-height:1.5;}
+  .setRow p:last-child{margin-bottom:0;}
+  .dangerBtn{background:rgba(207,90,82,0.15); color:var(--unknown); border:1px solid var(--unknown); border-radius:9px; padding:9px 14px; font-size:14px;}
+  .accentBtn{background:rgba(139,92,246,0.15); color:#c4b5fd; border:1px solid var(--accent); border-radius:9px; padding:9px 14px; font-size:14px; margin-right:8px;}
 
   #loadingOverlay{
     position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; z-index:50;
@@ -140,7 +139,6 @@
 <body>
 <div id="app">
 
-  <!-- LIBRARY -->
   <div class="screen active" id="screen-library">
     <div class="topbar">
       <h1>📚 Мои книги</h1>
@@ -153,7 +151,6 @@
     <div id="libraryList"></div>
   </div>
 
-  <!-- READER -->
   <div class="screen" id="screen-reader">
     <div id="readerBar">
       <button class="iconbtn" id="btnBack">← Книги</button>
@@ -167,7 +164,6 @@
     </div>
   </div>
 
-  <!-- SETTINGS -->
   <div class="screen" id="screen-settings">
     <div class="topbar">
       <h1>Настройки</h1>
@@ -180,12 +176,19 @@
         <button class="dangerBtn" id="btnClearDict">Очистить весь словарь</button>
       </div>
       <div class="setRow">
-        <h3>Перевод</h3>
-        <p>Используется бесплатный машинный перевод Google. Отдельное слово переводится точно как написано, а строка сверху переводит текст абзацами, с учётом контекста, не дословно.</p>
+        <h3>Резервная копия</h3>
+        <p>Скачай файл с книгами и словарём перед тем, как обновлять сайт — если после обновления данные вдруг слетят, этим же файлом всё восстановишь.</p>
+        <button class="accentBtn" id="btnExport">⬇️ Скачать копию</button>
+        <button class="accentBtn" id="btnImport">⬆️ Восстановить из файла</button>
+        <input type="file" id="importInput" accept=".json">
       </div>
       <div class="setRow">
-        <h3>Обновления и iPhone</h3>
-        <p>Приложение открыто по одному и тому же адресу — при обновлении файла на этом же адресе книги и словарь никуда не пропадают, они хранятся в браузере отдельно от кода страницы. Добавить на экран «Домой»: Safari → «Поделиться» → «На экран Домой».</p>
+        <h3>Перевод</h3>
+        <p>Слово переводится точно как написано, плюс показывается транскрипция произношения. Строка сверху переводит текст по предложениям, с учётом контекста, не дословно.</p>
+      </div>
+      <div class="setRow">
+        <h3>iPhone</h3>
+        <p>Открывай приложение всегда по одному и тому же адресу и не переустанавливай ярлык на экране «Домой» — так книги и словарь останутся на месте между обновлениями сайта.</p>
       </div>
     </div>
   </div>
@@ -194,7 +197,7 @@
 
 <div id="overlay"></div>
 <div id="sheet">
-  <div id="sheetWord">word</div>
+  <div id="sheetWordRow"><div id="sheetWord">word</div><div id="sheetPhonetic"></div></div>
   <div id="sheetTranslation">…</div>
   <div class="sheetBtns">
     <button class="know" id="btnKnow">✅ Знаю</button>
@@ -212,11 +215,12 @@ let dbPromise = null;
 function getDB(){
   if (dbPromise) return dbPromise;
   dbPromise = new Promise((resolve, reject) => {
-    const req = indexedDB.open('ReaderAppDB', 1);
+    const req = indexedDB.open('ReaderAppDB', 2);
     req.onupgradeneeded = (e) => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains('books')) db.createObjectStore('books', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('translations')) db.createObjectStore('translations', { keyPath: 'key' });
+      if (!db.objectStoreNames.contains('phonetics')) db.createObjectStore('phonetics', { keyPath: 'word' });
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
@@ -258,6 +262,37 @@ async function idbGetAll(store){
     r.onsuccess = () => res(r.result);
     r.onerror = () => rej(r.error);
   });
+}
+
+/* ================= Backup: export / import ================= */
+async function exportBackup(){
+  const books = await idbGetAll('books');
+  const payload = { version: 1, exportedAt: Date.now(), dict, books };
+  const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'reader-backup.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+async function importBackupFile(file){
+  let payload;
+  try{ payload = JSON.parse(await file.text()); }
+  catch(e){ alert('Файл повреждён или это не резервная копия.'); return; }
+  if (payload.dict){
+    dict = Object.assign({}, payload.dict, dict);
+    saveDict(dict);
+  }
+  if (Array.isArray(payload.books)){
+    const existing = await idbGetAll('books');
+    const existingIds = new Set(existing.map(b => b.id));
+    for (const b of payload.books){
+      if (!existingIds.has(b.id)) await idbSet('books', b);
+    }
+  }
+  alert('Готово, данные восстановлены.');
+  refreshLibrary();
+  refreshSettings();
 }
 
 /* ================= Word form matching (lemmatizer) ================= */
@@ -355,7 +390,7 @@ function setDictWord(lemma, status){
 }
 function cssEscape(s){ return s.replace(/["\\]/g, '\\$&'); }
 
-/* ================= Translation (free Google endpoint) ================= */
+/* ================= Translation (free Google endpoint) + phonetics ================= */
 const translateMemCache = new Map();
 let translateQueue = Promise.resolve();
 function queuedFetch(fn){
@@ -377,6 +412,29 @@ async function translateText(text){
   });
   translateMemCache.set(key, result);
   idbSet('translations', { key, value: result }).catch(()=>{});
+  return result;
+}
+const phoneticMemCache = new Map();
+async function fetchPhonetic(word){
+  if (phoneticMemCache.has(word)) return phoneticMemCache.get(word);
+  const cached = await idbGet('phonetics', word).catch(() => null);
+  if (cached) { phoneticMemCache.set(word, cached.value); return cached.value; }
+  let result = '';
+  try{
+    const res = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word));
+    if (res.ok){
+      const data = await res.json();
+      if (Array.isArray(data) && data[0]){
+        if (data[0].phonetic) result = data[0].phonetic;
+        else if (Array.isArray(data[0].phonetics)){
+          const withText = data[0].phonetics.find(p => p.text);
+          if (withText) result = withText.text;
+        }
+      }
+    }
+  }catch(e){ result = ''; }
+  phoneticMemCache.set(word, result);
+  idbSet('phonetics', { word, value: result }).catch(()=>{});
   return result;
 }
 
@@ -446,12 +504,12 @@ async function parseEpubFile(file){
 let currentBook = null;
 let currentChapterIdx = 0;
 let stripObserver = null;
-let translatedIdx = new Set();
+let translatedSentences = new Set();
 
 function escapeHtml(s){
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-function renderParagraphHTML(text){
+function renderWordsHTML(text){
   let html = '';
   let lastIndex = 0;
   const re = /[A-Za-z']+/g;
@@ -466,6 +524,19 @@ function renderParagraphHTML(text){
     lastIndex = re.lastIndex;
   }
   html += escapeHtml(text.slice(lastIndex));
+  return html;
+}
+function splitSentences(text){
+  const parts = text.match(/[^.!?]+[.!?]+(\s+|$)|[^.!?]+$/g);
+  return parts ? parts.map(s => s.trim()).filter(Boolean) : [text];
+}
+function renderParagraph(text, counter){
+  const sentences = splitSentences(text);
+  let html = '';
+  sentences.forEach(sentText => {
+    const sIdx = counter.value++;
+    html += '<span class="sent" data-s="' + sIdx + '">' + renderWordsHTML(sentText) + '</span> ';
+  });
   return html;
 }
 
@@ -546,36 +617,45 @@ async function openBook(id){
 
 function renderChapter(idx, restoreScroll){
   currentChapterIdx = idx;
-  translatedIdx = new Set();
+  translatedSentences = new Set();
   const chapter = currentBook.chapters[idx];
   const mainText = document.getElementById('mainText');
   const strip = document.getElementById('strip');
   mainText.innerHTML = '';
   strip.innerHTML = '';
   strip.scrollLeft = 0;
-  chapter.paragraphs.forEach((p, i) => {
-    const pEl = document.createElement('p');
-    pEl.dataset.p = i;
-    pEl.innerHTML = renderParagraphHTML(p);
-    mainText.appendChild(pEl);
 
+  const counter = { value: 0 };
+  const sentenceTexts = [];
+  chapter.paragraphs.forEach((p) => {
+    const pEl = document.createElement('p');
+    const before = counter.value;
+    pEl.innerHTML = renderParagraph(p, counter);
+    mainText.appendChild(pEl);
+    const sents = splitSentences(p);
+    sents.forEach((s, k) => { sentenceTexts[before + k] = s; });
+  });
+  sentenceTexts.forEach((s, i) => {
     const seg = document.createElement('span');
     seg.className = 'stripSeg loading';
-    seg.dataset.p = i;
+    seg.dataset.s = i;
     seg.textContent = '…';
     strip.appendChild(seg);
   });
+  currentBook._sentenceTexts = sentenceTexts;
+
   document.getElementById('chapterSelect').value = idx;
 
   if (stripObserver) stripObserver.disconnect();
   stripObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting){
-        const i = parseInt(entry.target.dataset.p, 10);
-        onParagraphVisible(i);
+        entry.target.querySelectorAll('.sent').forEach(sentEl => {
+          translateStripSentence(parseInt(sentEl.dataset.s, 10));
+        });
       }
     });
-  }, { root: mainText, threshold: 0.55 });
+  }, { root: mainText, threshold: 0.2 });
   mainText.querySelectorAll('p').forEach(p => stripObserver.observe(p));
 
   mainText.scrollTop = restoreScroll || 0;
@@ -591,36 +671,34 @@ function renderChapter(idx, restoreScroll){
   };
 }
 
-function onParagraphVisible(i){
-  scrollStripToParagraph(i);
-  for (let j = i; j <= i + 2; j++) translateStripSeg(j);
-}
-
-function scrollStripToParagraph(i){
+async function translateStripSentence(i){
+  if (translatedSentences.has(i)) return;
+  const text = currentBook._sentenceTexts && currentBook._sentenceTexts[i];
+  if (!text) return;
+  translatedSentences.add(i);
   const strip = document.getElementById('strip');
-  const seg = strip.querySelector('.stripSeg[data-p="' + i + '"]');
-  if (!seg) return;
-  strip.querySelectorAll('.stripSeg.current').forEach(el => el.classList.remove('current'));
-  seg.classList.add('current');
-  const target = Math.max(0, seg.offsetLeft - 16);
-  strip.scrollTo({ left: target, behavior: 'smooth' });
-  translateStripSeg(i);
-}
-
-async function translateStripSeg(i){
-  if (translatedIdx.has(i)) return;
-  const chapter = currentBook.chapters[currentChapterIdx];
-  if (!chapter.paragraphs[i]) return;
-  translatedIdx.add(i);
-  const strip = document.getElementById('strip');
-  const seg = strip.querySelector('.stripSeg[data-p="' + i + '"]');
+  const seg = strip.querySelector('.stripSeg[data-s="' + i + '"]');
   try{
-    const translated = await translateText(chapter.paragraphs[i]);
+    const translated = await translateText(text);
     if (seg){ seg.textContent = translated; seg.classList.remove('loading'); }
   }catch(e){
     if (seg){ seg.textContent = '(ошибка перевода)'; }
-    translatedIdx.delete(i);
+    translatedSentences.delete(i);
   }
+}
+
+function jumpStripToSentence(i){
+  const strip = document.getElementById('strip');
+  const seg = strip.querySelector('.stripSeg[data-s="' + i + '"]');
+  if (!seg) return;
+  strip.querySelectorAll('.stripSeg.current').forEach(el => el.classList.remove('current'));
+  seg.classList.add('current');
+  const center = () => {
+    const target = seg.offsetLeft + seg.offsetWidth/2 - strip.clientWidth/2;
+    strip.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+  };
+  center();
+  translateStripSentence(i).then(() => setTimeout(center, 60));
 }
 
 /* ================= Directional swipe: vertical = English text, horizontal = translation strip ================= */
@@ -693,6 +771,7 @@ let activeLemma = null;
 function openWordPopup(word, lemma){
   activeLemma = lemma;
   document.getElementById('sheetWord').textContent = word;
+  document.getElementById('sheetPhonetic').textContent = '';
   document.getElementById('sheetTranslation').textContent = '…';
   document.getElementById('overlay').classList.add('show');
   document.getElementById('sheet').classList.add('show');
@@ -700,6 +779,9 @@ function openWordPopup(word, lemma){
     document.getElementById('sheetTranslation').textContent = t;
   }).catch(() => {
     document.getElementById('sheetTranslation').textContent = '(ошибка перевода)';
+  });
+  fetchPhonetic(word).then(p => {
+    document.getElementById('sheetPhonetic').textContent = p || '';
   });
 }
 function closeWordPopup(){
@@ -757,6 +839,13 @@ document.getElementById('btnClearDict').addEventListener('click', () => {
     refreshSettings();
   }
 });
+document.getElementById('btnExport').addEventListener('click', exportBackup);
+document.getElementById('btnImport').addEventListener('click', () => document.getElementById('importInput').click());
+document.getElementById('importInput').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (file) await importBackupFile(file);
+  e.target.value = '';
+});
 
 document.getElementById('chapterSelect').addEventListener('change', (e) => {
   currentBook.lastChapter = parseInt(e.target.value, 10);
@@ -783,8 +872,8 @@ document.getElementById('mainText').addEventListener('click', (e) => {
   const span = e.target.closest('.word');
   if (!span) return;
   openWordPopup(span.dataset.w, span.dataset.l);
-  const p = span.closest('p');
-  if (p) scrollStripToParagraph(parseInt(p.dataset.p, 10));
+  const sentEl = span.closest('.sent');
+  if (sentEl) jumpStripToSentence(parseInt(sentEl.dataset.s, 10));
 });
 document.getElementById('overlay').addEventListener('click', closeWordPopup);
 document.getElementById('btnKnow').addEventListener('click', () => { if (activeLemma) setDictWord(activeLemma, 'known'); closeWordPopup(); });
