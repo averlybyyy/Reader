@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+vm.runInThisContext(fs.readFileSync(new URL('../vendor/compromise.js',import.meta.url),'utf8'));
+const {family,tokens,segments,russianMatch,validateBackup,bookProgress,csvVocab}=await import('../src/core.js');
+test('word families include plurals, possessives, irregular verbs and doggy',()=>{for(const w of ['dog','dogs',"dog's","dogs'",'dog’s','doggy','doggies'])assert.equal(family(w),'dog',w);for(const w of ['went','gone'])assert.equal(family(w),'go');assert.equal(family('children'),'child');assert.equal(family('books'),'book');assert.equal(family('running'),'run');assert.equal(family('daisies'),'daisy');assert.equal(family('bonus'),'bonus');assert.equal(family('custom',{custom:'dog'}),'dog');});
+test('tokenization preserves punctuation and original English text',()=>{const s='“My dog’s toy,” she said. Dogs, doggy — don’t stop!';assert.equal(tokens(s).map(t=>t.text).join(''),s);assert.ok(tokens(s).some(t=>t.text==='dog’s'&&t.word));});
+test('long translation chunks never truncate source text',()=>{const s=Array(100).fill('Alice reads a very long book.').join(' ');const out=segments(s,100);assert.ok(out.every(p=>p.length<=100));assert.equal(out.join(' ').replace(/\s/g,''),s.replace(/\s/g,''));});
+test('alignment finds translated dog and declines unrelated words',()=>{const text='У меня дома есть собака.';const m=russianMatch(text,['собака','пёс']);assert.equal(text.slice(m.start,m.end),'собака');assert.equal(russianMatch(text,['стол']),null);const t='Я вижу собаку.';const n=russianMatch(t,['собака']);assert.equal(t.slice(n.start,n.end),'собаку');});
+test('backup rejects malformed data before any writes and accepts legacy backups',()=>{assert.throws(()=>validateBackup({version:2,books:[{id:'x',title:'Bad',chapters:[{}]}]}));assert.throws(()=>validateBackup({version:9,books:[]}));const old=validateBackup({version:1,books:[],dict:{dog:'unsure'}});assert.equal(old.vocab[0].status,'learning');});
+test('progress is weighted by content and CSV quotes correctly',()=>{assert.equal(bookProgress({chapters:[{paragraphs:['abcd']},{paragraphs:['abcd']}],lastChapter:1,chapterProgress:.5}),75);assert.match(csvVocab([{word:'dog',translation:'собака, пёс',status:'known'}]),/"собака, пёс"/);});

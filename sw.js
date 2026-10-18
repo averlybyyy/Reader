@@ -1,0 +1,7 @@
+// Bump this on every release. User data lives in ReaderAppDB, not this cache.
+const CACHE='reader-shell-2.0.0';
+const ASSETS=['./','./index.html','./styles.css','./manifest.webmanifest','./src/app.js','./src/core.js','./src/db.js','./src/icons.js','./src/importers.js','./src/translate.js','./src/demo.js','./src/reader.js','./src/ui.js','./vendor/jszip.min.js','./vendor/compromise.js','./vendor/en_US.txt','./vendor/pdf.min.mjs','./vendor/pdf.worker.min.mjs','./icons/paw.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png','./THIRD_PARTY.md'];
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(path=>new Request(path,{cache:'reload'}))))));
+self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
+self.addEventListener('activate',event=>event.waitUntil((async()=>{for(const key of await caches.keys())if(key.startsWith('reader-shell-')&&key!==CACHE)await caches.delete(key);await self.clients.claim();})()));
+self.addEventListener('fetch',event=>{const url=new URL(event.request.url);if(event.request.method!=='GET'||url.origin!==self.location.origin)return;if(!ASSETS.some(path=>new URL(path,self.registration.scope).pathname===url.pathname)&&event.request.mode!=='navigate')return;event.respondWith((async()=>{const cache=await caches.open(CACHE);return await cache.match(event.request,{ignoreSearch:true})|| (event.request.mode==='navigate'?await cache.match('./index.html'):null)||fetch(event.request);})());});
