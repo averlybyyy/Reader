@@ -11,7 +11,7 @@ import {ao3Help} from './ao3.js';
 import {startCloud} from './cloud.js';
 import {cloudCard,installCloudUI,updateCloudUI} from './cloud-ui.js';
 
-const VERSION='2.3.0';let screen='library',books=[],vocab=new Map(),aliases={},prefs={fontSize:23,lineHeight:1.8,font:'serif'},reader,registration,filter='all',query='',libraryQuery='',libraryTag='all',tagCatalog=[];
+const VERSION='2.4.0';let screen='library',books=[],vocab=new Map(),aliases={},prefs={fontSize:23,lineHeight:1.8,font:'serif'},reader,registration,filter='all',query='',libraryQuery='',libraryTag='all',tagCatalog=[];
 const app=document.getElementById('app');
 const safeCover=cover=>typeof cover==='string'&&/^data:image\/(png|jpeg|webp|gif);base64,[a-zA-Z0-9+/=\s]+$/.test(cover)?cover:'';
 const date=n=>n?new Intl.DateTimeFormat('ru',{day:'numeric',month:'short',year:'numeric'}).format(n):'не открывалась';

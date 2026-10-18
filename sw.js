@@ -1,5 +1,5 @@
 // Bump this on every release. User data lives in ReaderAppDB, not this cache.
-const CACHE='reader-shell-2.3.0';
+const CACHE='reader-shell-2.4.0';
 const ASSETS=['./','./index.html','./styles.css','./manifest.webmanifest','./src/app.js','./src/core.js','./src/db.js','./src/icons.js','./src/importers.js','./src/translate.js','./src/demo.js','./src/reader.js','./src/ui.js','./src/alignment.js','./src/tags.js','./src/notes.js','./src/ao3.js','./src/cloud-config.js','./src/dropbox.js','./src/cloud-format.js','./src/cloud.js','./src/cloud-ui.js','./vendor/jszip.min.js','./vendor/compromise.js','./vendor/en_US.txt','./vendor/pdf.min.mjs','./vendor/pdf.worker.min.mjs','./icons/paw.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png','./THIRD_PARTY.md'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(path=>new Request(path,{cache:'reload'}))))));
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
