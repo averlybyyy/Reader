@@ -80,3 +80,6 @@ textarea{font:inherit;color:var(--text);background:#171c19;border:1px solid var(
 .word-colors .mark-btn{width:44px;height:44px;flex-shrink:0}.word-colors .status-dot{width:10px;height:10px}
 .word-actions .expand-word{margin-left:0;margin-right:auto;min-height:44px;padding:0;gap:3px;font-size:10px}
 .word-panel .family-edit input{font-size:16px}
+
+/* Larger pronunciation text in the word card. */
+.word-panel .word-ipa{font-size:18px;line-height:1.35;color:#b4bdb0;overflow-wrap:anywhere}
